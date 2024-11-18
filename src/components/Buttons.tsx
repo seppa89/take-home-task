@@ -1,6 +1,7 @@
 import { FC } from "react";
-import { XMarkIcon } from "./icons";
+import { useGetListData } from "../api/getListData";
 import { useDeleteCard } from "../store";
+import { XMarkIcon } from "./icons";
 
 type ButtonProps = React.ComponentProps<"button">;
 
@@ -37,6 +38,24 @@ export const ToggleButton: FC<ButtonProps> = ({ ...props }) => {
 			{...props}
 		>
 			{props.children}
+		</button>
+	);
+};
+
+export const RefreshButton: FC<ButtonProps> = () => {
+	const { refetch, fetchStatus } = useGetListData();
+
+	async function handleRefresh() {
+		await refetch();
+	}
+
+	return (
+		<button
+			className="hover:text-gray-200 hover:bg-gray-800 transition-colors bg-black text-white rounded-lg py-1 px-1.5 mt-5 ml-5 text-sm w-20"
+			onClick={handleRefresh}
+			disabled={fetchStatus === "fetching"}
+		>
+			{fetchStatus === "fetching" ? "Wait" : "Refresh"}
 		</button>
 	);
 };

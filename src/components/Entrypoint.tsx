@@ -1,11 +1,11 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DeletedListItem, ListItem, useGetListData } from "../api/getListData";
-import { Card } from "./List";
-import { Spinner } from "./Spinner";
-import { DeletedCard } from "./DeletedCard";
 import { useStore } from "../store";
 import { ToggleButton } from "./Buttons";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { DeletedCard } from "./DeletedCard";
+import { Card } from "./List";
+import { Spinner } from "./Spinner";
 
 export const Entrypoint = () => {
 	const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
