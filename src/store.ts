@@ -54,7 +54,7 @@ export function useDeleteCard(id: number) {
 			useStore.setState(store => {
 				return {
 					...store,
-					deletedIds: new Set(store.deletedIds.add(id)),
+					deletedIds: new Set(store.deletedIds).add(id),
 				};
 			});
 
