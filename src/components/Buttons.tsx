@@ -29,3 +29,14 @@ export const DeleteButton: FC<
 		</button>
 	);
 };
+
+export const ToggleButton: FC<ButtonProps> = ({ ...props }) => {
+	return (
+		<button
+			className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1 w-20"
+			{...props}
+		>
+			{props.children}
+		</button>
+	);
+};

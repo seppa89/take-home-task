@@ -4,10 +4,13 @@ import { Card } from "./List";
 import { Spinner } from "./Spinner";
 import { DeletedCard } from "./DeletedCard";
 import { useStore } from "../store";
+import { ToggleButton } from "./Buttons";
 
 export const Entrypoint = () => {
 	const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
 	const listQuery = useGetListData();
+
+	const [revealed, setRevealed] = useState(false);
 
 	const deletedCards: DeletedListItem[] = useMemo(
 		() => listQuery.data?.filter(card => !card.isVisible) ?? [],
@@ -33,6 +36,10 @@ export const Entrypoint = () => {
 		return <Spinner />;
 	}
 
+	function handleReveal() {
+		setRevealed(r => !r);
+	}
+
 	return (
 		<div className="flex gap-x-16 w-6/12">
 			<div className="w-full max-w-xl">
@@ -55,17 +62,18 @@ export const Entrypoint = () => {
 					<h1 className="mb-1 font-medium text-lg">
 						Deleted Cards ({deletedCards.length})
 					</h1>
-					<button
-						disabled
-						className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1"
+					<ToggleButton
+						disabled={deletedCards.length === 0}
+						onClick={handleReveal}
 					>
-						Reveal
-					</button>
+						{revealed ? "Hide" : "Reveal"}
+					</ToggleButton>
 				</div>
 				<div className="flex flex-col gap-y-3">
-					{deletedCards.map(card => (
-						<DeletedCard key={card.id} title={card.title} />
-					))}
+					{revealed &&
+						deletedCards.map(card => (
+							<DeletedCard key={card.id} title={card.title} />
+						))}
 				</div>
 			</div>
 		</div>
