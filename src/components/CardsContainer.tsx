@@ -1,15 +1,13 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { DeletedListItem, ListItem, useGetListData } from "../api/getListData";
-import { useStore } from "../store";
+import { useRef, useState } from "react";
+import { useCards } from "../hooks/useCards";
 import { ToggleButton } from "./Buttons";
 import { DeletedCard } from "./DeletedCard";
 import { Card } from "./List";
 import { Spinner } from "./Spinner";
 
-export const Entrypoint = () => {
-	const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
-	const listQuery = useGetListData();
+export const CardsContainer = () => {
+	const { listQuery, deletedCards, visibleCards } = useCards();
 
 	const [revealed, setRevealed] = useState(false);
 
@@ -18,26 +16,6 @@ export const Entrypoint = () => {
 
 	const [visibleParent] = useAutoAnimate(visibleParentRef.current);
 	const [unvisibleParent] = useAutoAnimate(unvisibleParentRef.current);
-
-	const deletedCards: DeletedListItem[] = useMemo(
-		() => listQuery.data?.filter(card => !card.isVisible) ?? [],
-		[listQuery.data]
-	);
-
-	useEffect(() => {
-		if (listQuery.isLoading) {
-			return;
-		}
-
-		useStore.setState(store => {
-			return {
-				...store,
-				deletedIds: new Set(deletedCards.map(card => card.id)),
-			};
-		});
-
-		setVisibleCards(listQuery.data?.filter(item => item.isVisible) ?? []);
-	}, [listQuery.data, listQuery.isLoading, deletedCards]);
 
 	if (listQuery.isLoading) {
 		return <Spinner />;

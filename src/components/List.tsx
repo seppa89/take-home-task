@@ -1,10 +1,10 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { FC } from "react";
+import { useStore } from "zustand";
 import { ListItem } from "../api/getListData";
-import { toggleCollapse, useStore as store } from "../store";
+import { useStore as store, toggleCollapse } from "../store";
 import { DeleteButton, ExpandButton } from "./Buttons";
 import { ChevronDownIcon, ChevronUpIcon } from "./icons";
-import { useStore } from "zustand";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type CardProps = {
 	title: ListItem["title"];
