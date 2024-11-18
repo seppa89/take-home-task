@@ -1,22 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DeletedListItem, ListItem, useGetListData } from "../api/getListData";
 import { Card } from "./List";
 import { Spinner } from "./Spinner";
 import { DeletedCard } from "./DeletedCard";
+import { useStore } from "../store";
 
 export const Entrypoint = () => {
 	const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
 	const listQuery = useGetListData();
 
-	const deletedCards: DeletedListItem[] =
-		listQuery.data?.filter(card => !card.isVisible) ?? [];
+	const deletedCards: DeletedListItem[] = useMemo(
+		() => listQuery.data?.filter(card => !card.isVisible) ?? [],
+		[listQuery.data]
+	);
 
 	useEffect(() => {
 		if (listQuery.isLoading) {
 			return;
 		}
+
+		useStore.setState(store => {
+			return {
+				...store,
+				deletedIds: new Set(deletedCards.map(card => card.id)),
+			};
+		});
+
 		setVisibleCards(listQuery.data?.filter(item => item.isVisible) ?? []);
-	}, [listQuery.data, listQuery.isLoading]);
+	}, [listQuery.data, listQuery.isLoading, deletedCards]);
 
 	if (listQuery.isLoading) {
 		return <Spinner />;
