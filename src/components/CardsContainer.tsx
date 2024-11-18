@@ -47,12 +47,14 @@ export const CardsContainer = () => {
 					<h1 className="mb-1 font-medium text-lg">
 						Deleted Cards ({deletedCards.length})
 					</h1>
-					<ToggleButton
-						disabled={deletedCards.length === 0}
-						onClick={handleReveal}
-					>
-						{revealed ? "Hide" : "Reveal"}
-					</ToggleButton>
+					{deletedCards.length > 0 && (
+						<ToggleButton
+							disabled={deletedCards.length === 0}
+							onClick={handleReveal}
+						>
+							{revealed ? "Hide" : "Reveal"}
+						</ToggleButton>
+					)}
 				</div>
 				<div className="flex flex-col gap-y-3" ref={unvisibleParent}>
 					{revealed &&
