@@ -1,3 +1,7 @@
+## Links
+
+- [Live Preview](https://take-home-task-gamma.vercel.app/)
+
 ## Rules
 
 - add/remove/modify existing code to achieve the end result (some code needs a refactor)
