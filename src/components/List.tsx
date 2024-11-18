@@ -1,7 +1,9 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { ListItem } from "../api/getListData";
+import { toggleCollapse, useStore as store } from "../store";
 import { DeleteButton, ExpandButton } from "./Buttons";
 import { ChevronDownIcon, ChevronUpIcon } from "./icons";
+import { useStore } from "zustand";
 
 type CardProps = {
 	title: ListItem["title"];
@@ -10,10 +12,10 @@ type CardProps = {
 };
 
 export const Card: FC<CardProps> = ({ title, description, id }) => {
-	const [isExpanded, setIsExpanded] = useState(false);
+	const isExpanded = useStore(store, store => store.expandedIds.has(id));
 
 	function handleExpand() {
-		setIsExpanded(e => !e);
+		toggleCollapse(id);
 	}
 
 	return (

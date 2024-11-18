@@ -5,12 +5,14 @@ import { ListItem } from "./api/getListData";
 
 type State = {
 	deletedIds: Set<number>;
+	expandedIds: Set<number>;
 };
 
 export const useStore = create<State>()(
 	persist(
 		() => ({
 			deletedIds: new Set<number>(), // keeping deleted ids in Set will allowing to easy manipuling/toggling store
+			expandedIds: new Set<number>(),
 		}),
 		{
 			name: "settings",
@@ -23,6 +25,7 @@ export const useStore = create<State>()(
 
 					return {
 						state: {
+							expandedIds: new Set(existingValue.state.expandedIds.values()),
 							deletedIds: new Set(existingValue.state.deletedIds.values()),
 						},
 					};
@@ -31,6 +34,7 @@ export const useStore = create<State>()(
 					const stringValue = JSON.stringify({
 						state: {
 							deletedIds: [...new Set(newValue.state.deletedIds.values())],
+							expandedIds: [...new Set(newValue.state.expandedIds.values())],
 						},
 					});
 
@@ -44,8 +48,6 @@ export const useStore = create<State>()(
 
 export function useDeleteCard(id: number) {
 	const queryClient = useQueryClient();
-
-	console.log(id, "delete");
 
 	function deleteCard() {
 		queryClient.setQueryData<ListItem[]>(["list"], cards => {
@@ -69,4 +71,20 @@ export function useDeleteCard(id: number) {
 	}
 
 	return { deleteCard };
+}
+
+export function toggleCollapse(id: number) {
+	useStore.setState(state => {
+		const exists = state.expandedIds.has(id);
+
+		if (exists) {
+			state.expandedIds.delete(id);
+		} else {
+			state.expandedIds.add(id);
+		}
+
+		return {
+			...state,
+		};
+	});
 }
