@@ -1,16 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DeletedListItem, ListItem, useGetListData } from "../api/getListData";
 import { Card } from "./List";
 import { Spinner } from "./Spinner";
 import { DeletedCard } from "./DeletedCard";
 import { useStore } from "../store";
 import { ToggleButton } from "./Buttons";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export const Entrypoint = () => {
 	const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
 	const listQuery = useGetListData();
 
 	const [revealed, setRevealed] = useState(false);
+
+	const visibleParentRef = useRef();
+	const unvisibleParentRef = useRef();
+
+	const [visibleParent] = useAutoAnimate(visibleParentRef.current);
+	const [unvisibleParent] = useAutoAnimate(unvisibleParentRef.current);
 
 	const deletedCards: DeletedListItem[] = useMemo(
 		() => listQuery.data?.filter(card => !card.isVisible) ?? [],
@@ -46,7 +53,7 @@ export const Entrypoint = () => {
 				<h1 className="mb-1 font-medium text-lg">
 					My Awesome List ({visibleCards.length})
 				</h1>
-				<div className="flex flex-col gap-y-3">
+				<div className="flex flex-col gap-y-3" ref={visibleParent}>
 					{visibleCards.map(card => (
 						<Card
 							key={card.id}
@@ -69,7 +76,7 @@ export const Entrypoint = () => {
 						{revealed ? "Hide" : "Reveal"}
 					</ToggleButton>
 				</div>
-				<div className="flex flex-col gap-y-3">
+				<div className="flex flex-col gap-y-3" ref={unvisibleParent}>
 					{revealed &&
 						deletedCards.map(card => (
 							<DeletedCard key={card.id} title={card.title} />

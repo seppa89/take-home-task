@@ -4,6 +4,7 @@ import { toggleCollapse, useStore as store } from "../store";
 import { DeleteButton, ExpandButton } from "./Buttons";
 import { ChevronDownIcon, ChevronUpIcon } from "./icons";
 import { useStore } from "zustand";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type CardProps = {
 	title: ListItem["title"];
@@ -13,13 +14,14 @@ type CardProps = {
 
 export const Card: FC<CardProps> = ({ title, description, id }) => {
 	const isExpanded = useStore(store, store => store.expandedIds.has(id));
+	const [cardParrent] = useAutoAnimate();
 
 	function handleExpand() {
 		toggleCollapse(id);
 	}
 
 	return (
-		<div className="border border-black px-2 py-1.5">
+		<div className="border border-black px-2 py-1.5" ref={cardParrent}>
 			<div className="flex justify-between mb-0.5">
 				<h1 className="font-medium">{title}</h1>
 				<div className="flex">
