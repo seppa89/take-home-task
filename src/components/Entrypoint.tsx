@@ -15,7 +15,6 @@ export const Entrypoint = () => {
 		if (listQuery.isLoading) {
 			return;
 		}
-
 		setVisibleCards(listQuery.data?.filter(item => item.isVisible) ?? []);
 	}, [listQuery.data, listQuery.isLoading]);
 
@@ -24,7 +23,7 @@ export const Entrypoint = () => {
 	}
 
 	return (
-		<div className="flex gap-x-16">
+		<div className="flex gap-x-16 w-6/12">
 			<div className="w-full max-w-xl">
 				<h1 className="mb-1 font-medium text-lg">
 					My Awesome List ({visibleCards.length})
