@@ -45,6 +45,7 @@ export const Entrypoint = () => {
 							key={card.id}
 							title={card.title}
 							description={card.description}
+							id={card.id}
 						/>
 					))}
 				</div>

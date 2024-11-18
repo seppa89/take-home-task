@@ -6,9 +6,10 @@ import { ChevronDownIcon, ChevronUpIcon } from "./icons";
 type CardProps = {
 	title: ListItem["title"];
 	description: ListItem["description"];
+	id: ListItem["id"];
 };
 
-export const Card: FC<CardProps> = ({ title, description }) => {
+export const Card: FC<CardProps> = ({ title, description, id }) => {
 	const [isExpanded, setIsExpanded] = useState(false);
 
 	function handleExpand() {
@@ -23,7 +24,7 @@ export const Card: FC<CardProps> = ({ title, description }) => {
 					<ExpandButton onClick={handleExpand}>
 						{isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
 					</ExpandButton>
-					<DeleteButton />
+					<DeleteButton id={id} />
 				</div>
 			</div>
 			{isExpanded && <p className="text-sm">{description}</p>}

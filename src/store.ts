@@ -1,5 +1,7 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { create } from "zustand";
 import { persist, StorageValue } from "zustand/middleware";
+import { ListItem } from "./api/getListData";
 
 type State = {
 	deletedIds: Set<number>;
@@ -39,3 +41,32 @@ export const useStore = create<State>()(
 		}
 	)
 );
+
+export function useDeleteCard(id: number) {
+	const queryClient = useQueryClient();
+
+	console.log(id, "delete");
+
+	function deleteCard() {
+		queryClient.setQueryData<ListItem[]>(["list"], cards => {
+			useStore.setState(store => {
+				return {
+					...store,
+					deletedIds: new Set(store.deletedIds.add(id)),
+				};
+			});
+
+			return cards?.map(card => {
+				if (card.id === id) {
+					return {
+						...card,
+						isVisible: false,
+					};
+				}
+				return card;
+			});
+		});
+	}
+
+	return { deleteCard };
+}
