@@ -88,3 +88,32 @@ export function toggleCollapse(id: number) {
 		};
 	});
 }
+
+export function useRevertCard(id: number) {
+	const queryClient = useQueryClient();
+
+	function revertCard() {
+		queryClient.setQueryData<ListItem[]>(["list"], cards => {
+			useStore.setState(store => {
+				return {
+					...store,
+					deletedIds: store.deletedIds.delete(id)
+						? new Set(store.deletedIds)
+						: store.deletedIds,
+				};
+			});
+
+			return cards?.map(card => {
+				if (card.id === id) {
+					return {
+						...card,
+						isVisible: true,
+					};
+				}
+				return card;
+			});
+		});
+	}
+
+	return { revertCard };
+}

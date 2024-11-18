@@ -57,7 +57,7 @@ export const CardsContainer = () => {
 				<div className="flex flex-col gap-y-3" ref={unvisibleParent}>
 					{revealed &&
 						deletedCards.map(card => (
-							<DeletedCard key={card.id} title={card.title} />
+							<DeletedCard key={card.id} title={card.title} id={card.id} />
 						))}
 				</div>
 			</div>

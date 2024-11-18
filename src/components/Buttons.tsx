@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useGetListData } from "../api/getListData";
 import { useDeleteCard } from "../store";
-import { XMarkIcon } from "./icons";
+import { RevertIcon, XMarkIcon } from "./icons";
 
 type ButtonProps = React.ComponentProps<"button">;
 
@@ -56,6 +56,19 @@ export const RefreshButton: FC<ButtonProps> = () => {
 			disabled={fetchStatus === "fetching"}
 		>
 			{fetchStatus === "fetching" ? "Wait" : "Refresh"}
+		</button>
+	);
+};
+
+type RevertButtonProps = Omit<ButtonProps, "children">;
+
+export const RevertButton: FC<RevertButtonProps> = ({ ...props }) => {
+	return (
+		<button
+			className="hover:text-gray-700 transition-colors flex items-center justify-center"
+			{...props}
+		>
+			<RevertIcon />
 		</button>
 	);
 };
